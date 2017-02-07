@@ -73,7 +73,7 @@ class window(QMainWindow):
         self.button_full.clicked.connect(self.fullscreen)
         self.show()
     #---------Open File Dialogue-----------------------
-    def open_file(self,newState):
+    def open_file(self):
         if self.media.state() == Phonon.PlayingState:
             self.media.play()
             self.button_play.setEnabled(True)
@@ -85,14 +85,14 @@ class window(QMainWindow):
                 self.media.setCurrentSource(Phonon.MediaSource(path))
         
     #----------------------------------------------------------------
-    def statech(self,newstate,oldstate):
+    def statech(self,state):
         try:
-            if newstate == Phonon.PlayingState:
+            if state == Phonon.PlayingState:
                 self.button_play.setEnabled(False)
-            elif (newstate != Phonon.LoadingState and newstate != Phonon.BufferingState):
+            elif (state != Phonon.LoadingState and state != Phonon.BufferingState):
                 self.button_play.setEnabled(True)
                 
-            if newstate == Phonon.ErrorState:
+            if state == Phonon.ErrorState:
                 pass
         except AttributeError:
             pass
