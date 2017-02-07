@@ -4,6 +4,18 @@ from PyQt4.QtGui import*
 from PyQt4.QtCore import*
 from PyQt4.phonon import Phonon
 import sys
+try:
+    from PyQt4.phonon import Phonon
+    
+except ImportError:
+    app = QtGui.QApplication(sys.argv)
+    QMessageBox.critical(None, "Music Player",
+            "Your Qt installation does not have Phonon support.",
+            QMessageBox.Ok | QMessageBox.Default,
+            QMessageBox.NoButton)
+    sys.exit(1)
+
+
 class window(QMainWindow):
     def __init__(self, parent=None):
         super(window, self).__init__(parent)
@@ -13,7 +25,6 @@ class window(QMainWindow):
         self.setWindowIcon(QIcon('icon.png'))
         self.setGeometry(50, 50, 700,680)
         self.setFixedSize(700,680)
-        
         #self.setStyleSheet('background-color:#383636;')
         #--------ToolBar setting-------------------------
         toolbar=self.addToolBar('')
@@ -27,12 +38,18 @@ class window(QMainWindow):
         quit.triggered.connect(self.exiting)
         toolbar.setMovable(False)
         toolbar.setFocusPolicy(True)
+        #----------Full screen--------------------
+        self.short=QShortcut(self)
+        self.short.setKey(QKeySequence('Esc'))
+        self.short.setContext(Qt.ApplicationShortcut)
+        self.short.activated.connect(self.handle)
 	#---------Phonon source--------------------
         self.media = Phonon.MediaObject(self)
         self.media.stateChanged.connect(self.statech)
         self.video= Phonon.VideoWidget(self)
         self.audio = Phonon.AudioOutput(Phonon.VideoCategory, self)
         self.video.setGeometry(20,50,660,400)
+        
         self.audio = Phonon.AudioOutput(Phonon.VideoCategory, self)
         Phonon.createPath(self.media, self.audio)
         Phonon.createPath(self.media, self.video)
@@ -71,6 +88,7 @@ class window(QMainWindow):
         self.button_full=QPushButton('Fullscreen',self)
         self.button_full.move(240,530)
         self.button_full.clicked.connect(self.fullscreen)
+        
         self.show()
     #---------Open File Dialogue-----------------------
     def open_file(self):
@@ -111,15 +129,18 @@ class window(QMainWindow):
     def pausing(self):
         self.media.pause()
     #---------Full screen setting---------------------
+    
     def fullscreen(self):
-        self.video.setGeometry(20,50,680,680)
-        self.slider.move(20,560)
-        self.volumeslider.move(195,585)
-        self.label.move(20,580)
-        self.frame.move(20,585)
-        self.button_play.move(20,630)
-        self.button_paus.move(130,630)
-        self.button_full.move(240,630)
+        self.video.enterFullScreen()
+      		
+        
+    def handle(self):
+        if self.video.isFullScreen():
+            self.video.exitFullScreen()
+        else:
+            self.video.enterFullScreen()   
+    
+            
 
 #------------Execute all function(app)------------------        
 if __name__ == '__main__':
