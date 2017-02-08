@@ -25,6 +25,11 @@ class window(QMainWindow):
         self.setWindowIcon(QIcon('icon.png'))
         self.setGeometry(50, 50, 700,680)
         self.setFixedSize(700,680)
+	 #----------Full screen--------------------
+	self.short=QShortcut(self)
+        self.short.setKey(QKeySequence('Esc'))
+        self.short.setContext(Qt.ApplicationShortcut)
+	self.short.activated.connect(self.handle)
         #self.setStyleSheet('background-color:#383636;')
         #--------ToolBar setting-------------------------
         toolbar=self.addToolBar('')
@@ -38,11 +43,6 @@ class window(QMainWindow):
         quit.triggered.connect(self.exiting)
         toolbar.setMovable(False)
         toolbar.setFocusPolicy(True)
-        #----------Full screen--------------------
-        self.short=QShortcut(self)
-        self.short.setKey(QKeySequence('Esc'))
-        self.short.setContext(Qt.ApplicationShortcut)
-        self.short.activated.connect(self.handle)
 	#---------Phonon source--------------------
         self.media = Phonon.MediaObject(self)
         self.media.stateChanged.connect(self.statech)
