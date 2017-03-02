@@ -5,6 +5,6 @@ contact mail: pythonaz@yahoo.com
             
             
 first install PyQt
-and run via terminal python pyplayer.py
+and run via terminal python qplayer.py
             
 
