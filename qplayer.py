@@ -10,7 +10,7 @@ try:
 except ImportError:
     app = QtGui.QApplication(sys.argv)
     QMessageBox.critical(None, "Music Player",
-            "Your Qt installation does not have Phonon support.",
+            "Your Qt installation does not have support Phonon .",
             QMessageBox.Ok | QMessageBox.Default,
             QMessageBox.NoButton)
     sys.exit(1)
